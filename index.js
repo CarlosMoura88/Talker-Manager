@@ -40,11 +40,8 @@ app.get('/talker/:id', async (req, res) => {
 
 // Requisito 3
 
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  const token = generateToken();
-  validateEmail(email);
-  validatePassword(password);
+app.post('/login', validateEmail, validatePassword, (_req, res) => {  
+  const token = generateToken();  
   return res.status(HTTP_OK_STATUS).json({ token });
 });
 
