@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', 
 validToken, 
-validName, validAge, validTalk, validRate, validWatchedAt, async (req, res) => {      
+validName, validAge, validTalk, validWatchedAt, validRate, async (req, res) => {      
   const { name, age, talk } = req.body;
   const talkers = await readTalkerJSON();
   const id = talkers.length + 1;
@@ -43,6 +43,26 @@ validName, validAge, validTalk, validRate, validWatchedAt, async (req, res) => {
   await writeTalkersJSON(talkers);
 
   return res.status(201).json(talker);
+});
+
+router.put('/:id',
+validToken, 
+validName, 
+validAge, validTalk, validWatchedAt, validRate, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await readTalkerJSON();  
+  const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
+  talkers[talkerIndex] = {
+    ...talkers[talkerIndex],
+    name, 
+    age,
+    talk,
+  };
+  
+  await writeTalkersJSON(talkers);
+
+  return res.status(200).json(talkers[talkerIndex]);
 });
 
 module.exports = router;
