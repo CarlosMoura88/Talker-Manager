@@ -65,4 +65,12 @@ validAge, validTalk, validWatchedAt, validRate, async (req, res) => {
   return res.status(200).json(talkers[talkerIndex]);
 });
 
+router.delete('/:id', validToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readTalkerJSON();
+  const deletedTalkers = talkers.filter((t) => t.id !== Number(id));
+  await writeTalkersJSON(deletedTalkers);
+  return res.status(204).json();
+});
+
 module.exports = router;
